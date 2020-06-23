@@ -138,6 +138,14 @@ img{
 .btn:hover{
     background-color: #DFD0AF;
     color: #224268;
+    box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.15);
+
+}
+
+form .btn:hover{
+    color: #fff;
+    box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.15);
+    border: 1px solid #C7B690;
 }
 
 footer{

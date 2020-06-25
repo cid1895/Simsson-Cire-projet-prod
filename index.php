@@ -1,5 +1,7 @@
 <?php
-  include_once'./partsphp/head.php';
+  include_once'./admin/partsphp/head.php';
+  include_once'./admin/partsphp/function/connector.php';
+  include_once'./admin/partsphp/function/products.php';
 ?>
   <header>
     <nav>
@@ -31,72 +33,93 @@
     <section id="produit">
       <div class="container">
         <h2 class="h2">Nos produits</h2>
-        <div class="row clearfix">
+        <div class="row">
+        <?php
+          $requete = all_products();
+          foreach($requete as $row){
+        ?>
           <div class="col-lg-4 col-md-6 col-s-12">
             <div class="shadow">
               <div>
-                <img src="img/Sub-disco-1.jpg" alt="">
+                <img src="img/<?php echo $row["img"];?>.jpg" alt="">
               </div>
               <div class="text-card">
-                <h3>Version de base</h3>
-                <span>1250,99$</span>
+                <h3><?php echo $row["nom"];?></h3>
+                <span><?php echo $row["prix"];?></span>
                 <ul>
-                  <li>Bonne pour deux utilisations.</li>
-                  <li>Elle attire 50 % des molécule atomique 15 pied autour de l'utilisateur.</li>
-                  <li>Pour plus de sécurité elle est impossible à modifier.</li>
-                  <li>Elle est blanche.</li>
+                  <li><?php echo $row["desc1"];?></li>
+                  <li><?php echo $row["desc2"];?></li>
+                  <li><?php echo $row["desc3"];?></li>
+                  <li><?php echo $row["desc4"];?></li>
+                  <li><?php echo $row["desc5"];?></li>
                 </ul>
                 <button type="button" class="btn" data-toggle="modal" data-target="#exampleModal">Réserver</button>
               </div>
             </div>
           </div>
 
-          <div class="col-lg-4 col-md-6 col-s-12">
-            <div class="shadow">
-              <div>
-                <img src="img/Sub-disco-2.jpg" alt="">
-              </div>
-              <div class="text-card">
-                <h3>Version pas de base</h3>
-                <span>3050.74$</span>
-                <ul>
-                  <li>Bonne pour deux utilisations.</li>
-                  <li>Elle attire 25 % des molécule atomique 10 pied autour de l'utilisateur.</li>
-                  <li>Pour plus de sécurité elle est trempée dans un plastique qui la rend
-                    monobloc et impénétrable.</li>
-                  <li>Elle est de couleur pastel.</li>
-                </ul>
-                <button type="button" class="btn" data-toggle="modal" data-target="#exampleModal">Réserver</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 col-s-12">
-            <div class="shadow">
-              <div>
-                <img src="img/Sub-disco-3.jpg" alt="">
-              </div>
-              <div class="text-card">
-                <h3>Version gros gros luxe</h3>
-                <span>10287.23$</span>
-                <ul>
-                  <li>Bonne pour deux utilisations</li>
-                  <li>Elle n'attire aucune molécule nocive.</li>
-                  <li>Pour plus de sécurité elle est trempée dans un plastique qui la rend
-                    monobloc et impénétrable qui elle est recouverte d’une couche d’acier
-                    pour plus d’impénétrabilité.</li>
-                  <li>De plus une couverture de fonte permet de ne pas le perdre car au poids
-                    qu'il a vous ne pouvez l'oublier!</li>
-                  <li>Elle a deux choix de couleurs vive Rouge ou brun vif.</li>
-                </ul>
-                <button type="button" class="btn btn-primary" data-toggle="modal"
-                  data-target="#exampleModal">Réserver</button>
-              </div>
-            </div>
-          </div>
+         
+          
+          <?php
+            }
+          ?>
 
 
         </div>
+      </div>
+    </section>
+    <section id="reserver">
+      <div class="container">
+      <h2 class="h2">Réserver</h2>
+        <p>Veullez entrer votre adresse courriel et le produit que vous désirez. Un courriel vous sera envoyé losrque le
+            produit sera disponible</p>
+        <form action="" method="POST">   
+          <?php
+            $dbHost = "localhost";
+            $dbUser = "root";
+            $dbPassword = "root";
+            $dbName = "simsson_cire";
+        
+            try {
+                $dsn = "mysql:host=" . $dbHost . ";dbname=" . $dbName;
+                $pdo = new PDO($dsn, $dbUser, $dbPassword);
+            } catch(PDOException $e) {
+                echo "erreur de connection " . $e->getMessage();
+            }
+        
+            $status = "";
+            if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                
+                $email = $_POST['email'];
+                $produit = $_POST['product'];
+        
+                if(empty($email)) {
+                    $status = "Veuillez entrer votre adresse courriel";
+                }else {
+                    $sql = "INSERT INTO email_reservations (email, produit) VALUES (:email, :produit)";
+        
+                    $stmt = connect()->prepare($sql);
+        
+                    $stmt->execute(['email' => $email, 'produit' => $produit]);
+        
+                    $status = "Merci";
+                    $email = "";
+                }
+            }
+          ?>     
+          <input type="text" class="email" name="email" id="email" placeholder="Adresse courriel" value="<?php if($_SERVER['REQUEST_METHOD'] == 'POST') echo $email ?>"><br>
+          <select name="product" id="product">
+            <?php
+              $requete = all_products();
+              foreach($requete as $row){
+            ?>
+              <option value="<?php echo $row["nom"];?>"><?php echo $row["nom"];?></option>
+            <?php
+              }
+            ?>
+          </select><br>
+          <input type="submit" name="submit" class="btn" value="Réserver">
+        </form>
       </div>
     </section>
   </main>
@@ -105,7 +128,7 @@
   </footer>
 
 <?php
-  include_once'./partsphp/modal.php';
-  include_once'./partsphp/foot.php';
+  include_once'../admin/partsphp/modal.php';
+  include_once'../admin/partsphp/foot.php';
 ?>
   

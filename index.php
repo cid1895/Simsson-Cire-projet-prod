@@ -1,7 +1,7 @@
 <?php
-  include_once'./admin/partsphp/head.php';
-  include_once'./admin/partsphp/function/connector.php';
-  include_once'./admin/partsphp/function/products.php';
+  include_once'./partsphp/head.php';
+  include_once'./partsphp/function/connector.php';
+  include_once'./partsphp/function/products.php';
 ?>
   <header>
     <nav>
@@ -53,7 +53,6 @@
                   <li><?php echo $row["desc4"];?></li>
                   <li><?php echo $row["desc5"];?></li>
                 </ul>
-                <button type="button" class="btn" data-toggle="modal" data-target="#exampleModal">Réserver</button>
               </div>
             </div>
           </div>
@@ -128,7 +127,6 @@
   </footer>
 
 <?php
-  include_once'../admin/partsphp/modal.php';
-  include_once'../admin/partsphp/foot.php';
+  include_once'./partsphp/foot.php';
 ?>
   

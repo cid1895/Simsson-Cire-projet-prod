@@ -3,9 +3,11 @@
   include_once'./partsphp/function/connector.php';
   include_once'./partsphp/function/products.php';
 ?>
-  <header>
+  <header id="header">
     <nav>
-      <h1 class="logo"><a href="#">Simsson Cire</a></h1>
+      <div id="navbar">
+        <h1 id="logo" class="logo"><a class="navlink" href="#header">Simsson Cire</a></h1>
+      </div>
     </nav>
     <div class="hero-banner">
       <div class="container">
